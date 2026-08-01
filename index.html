@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f3ee">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Planera">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <title>Planera</title>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow" id="todayLabel">IDAG</p>
+        <h1>Planera</h1>
+      </div>
+      <div class="date-actions"><input class="date-picker" id="datePicker" type="date" aria-label="Välj datum"><button class="calendar-button" id="todayButton" type="button" aria-label="Gå till dagens datum">Idag</button></div>
+    </header>
+
+    <section class="view active" id="scheduleView" aria-label="Dagens schema">
+      <section class="hero-card">
+        <div class="progress-ring" id="dayRing" aria-label="Dagens framsteg"><span id="dayPercent">0%</span></div>
+        <div>
+          <p class="eyebrow">Dagens fokus</p>
+          <h2 id="daySummary">0 av 0 klart</h2>
+          <p class="muted">Små steg bygger en stabil dag.</p>
+        </div>
+      </section>
+
+      <section class="section-heading">
+        <div>
+          <p class="eyebrow">Schema</p>
+          <h2>Dina uppgifter</h2>
+        </div>
+        <button class="icon-button" id="addTaskButton" type="button" aria-label="Lägg till uppgift">+</button>
+      </section>
+      <div class="task-list" id="taskList" aria-live="polite"></div>
+      <button class="add-wide" id="addTaskButtonWide" type="button">+ Lägg till uppgift</button>
+    </section>
+
+    <section class="view" id="goalsView" aria-label="Mål">
+      <section class="section-heading goal-title">
+        <div>
+          <p class="eyebrow" id="goalWeekLabel">Denna vecka</p>
+          <h2>Min progress</h2>
+        </div>
+      </section>
+      <section class="hero-card goal-summary-card">
+        <div class="progress-ring" id="weekRing" aria-label="Veckans framsteg"><span id="weekPercent">0%</span></div>
+        <div>
+          <p class="eyebrow">Avklarat i schemat</p>
+          <h2 id="weekSummary">0 av 0 moment</h2>
+          <p class="muted">Summering av denna veckas schema.</p>
+        </div>
+      </section>
+      <section class="section-heading goal-list-heading">
+        <div>
+          <p class="eyebrow">Veckomål</p>
+          <h2>Planerade moment</h2>
+        </div>
+      </section>
+      <div class="goal-list" id="goalList" aria-live="polite"></div>
+    </section>
+
+    <section class="view" id="moneyView" aria-label="Ekonomi">
+      <section class="section-heading money-heading">
+        <div>
+          <p class="eyebrow">Översikt</p>
+          <h2>Ekonomi</h2>
+        </div>
+        <button class="calendar-button" id="moneyPeriodButton" type="button">Period: 28–27</button>
+      </section>
+      <section class="money-total">
+        <p class="eyebrow">Utgifter idag</p>
+        <h2 id="moneyTotal">£0.00</h2>
+        <p class="muted" id="moneyCount">Inga utgifter registrerade</p>
+      </section>
+      <section class="money-periods" aria-label="Summerade utgifter">
+        <button class="period-card period-button" id="weekPeriodCard" type="button" aria-label="Visa utgifter denna vecka per kategori"><p>Denna vecka</p><strong id="weekMoneyTotal">£0.00</strong><span id="weekMoneyDates"></span></button>
+        <button class="period-card period-button" id="monthPeriodCard" type="button" aria-label="Visa utgifter denna månad per kategori"><p>Denna månad</p><strong id="monthMoneyTotal">£0.00</strong><span id="monthMoneyDates"></span></button>
+      </section>
+      <section class="section-heading expenditure-heading">
+        <div>
+          <p class="eyebrow">Logg</p>
+          <h2>Utgifter idag</h2>
+        </div>
+        <button class="icon-button" id="addExpenseButton" type="button" aria-label="Lägg till utgift">+</button>
+      </section>
+      <div class="expense-list" id="expenseList" aria-live="polite"></div>
+      <button class="add-wide" id="addExpenseButtonWide" type="button">+ Lägg till utgift</button>
+    </section>
+
+    <nav class="tabbar" aria-label="Huvudmeny">
+      <button class="tab active" data-view="scheduleView" type="button"><span class="tab-icon">✓</span><span>Schema</span></button>
+      <button class="tab" data-view="goalsView" type="button"><span class="tab-icon">◎</span><span>Mål</span></button>
+      <button class="tab" data-view="moneyView" type="button"><span class="tab-icon">⌇</span><span>Ekonomi</span></button>
+    </nav>
+  </main>
+
+  <dialog id="entryDialog" class="entry-dialog">
+    <form id="entryForm" method="dialog">
+      <div class="dialog-top"><h2 id="dialogTitle">Ny uppgift</h2><button id="closeDialog" type="button" class="close-button" aria-label="Stäng">×</button></div>
+      <div id="formFields"></div>
+      <div class="dialog-actions"><button class="secondary-button" id="cancelDialog" type="button">Avbryt</button><button class="primary-button" id="saveEntry" type="submit">Spara</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="moneySettingsDialog" class="entry-dialog">
+    <form id="moneySettingsForm" method="dialog">
+      <div class="dialog-top"><h2>Månadsperiod</h2><button id="closeMoneySettings" type="button" class="close-button" aria-label="Stäng">×</button></div>
+      <div class="field"><label for="monthlyResetDay">Återställ sammanställning den</label><select id="monthlyResetDay" name="monthlyResetDay"></select></div>
+      <p class="muted">Utgifterna räknas från vald dag till dagen före nästa startdatum.</p>
+      <div class="dialog-actions"><button class="secondary-button" id="cancelMoneySettings" type="button">Avbryt</button><button class="primary-button" type="submit">Spara</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="spendingDialog" class="entry-dialog spending-dialog">
+    <div class="spending-dialog-content">
+      <div class="dialog-top"><div><p class="eyebrow" id="spendingPeriodLabel">Denna vecka</p><h2>Utgifter per kategori</h2></div><button id="closeSpendingDialog" type="button" class="close-button" aria-label="Stäng">×</button></div>
+      <p class="spending-total" id="spendingDialogTotal">£0.00</p>
+      <div class="category-chart" id="categoryChart" aria-live="polite"></div>
+    </div>
+  </dialog>
+
+  <template id="taskTemplate">
+    <article class="task-card">
+      <button class="check-button" type="button" aria-label="Markera uppgift som klar"></button>
+      <div class="task-content"><h3></h3><p class="task-meta"></p><div class="timer-line" hidden><span class="timer-value">00:00</span><button class="timer-button" type="button">Starta timer</button></div></div>
+      <div class="task-actions"><button class="move-button move-up" type="button" aria-label="Flytta upp">↑</button><button class="move-button move-down" type="button" aria-label="Flytta ner">↓</button><button class="delete-button" type="button" aria-label="Ta bort uppgift">×</button></div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
